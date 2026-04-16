@@ -19,3 +19,8 @@ export const getUserInfo = () => {
 export const logout = () => {
   return request.post('/user/logout')
 }
+
+// 注销账号
+export const deleteUser = (id) => {
+  return request.delete(`/user/${id}`)
+}

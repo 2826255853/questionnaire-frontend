@@ -30,6 +30,7 @@ import { useUserStore } from '@/stores/user'
 import { formatDateTime } from '@/utils/dateFormat'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { deleteUser } from '@/api/user'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -45,13 +46,16 @@ const handleDeleteAccount = async () => {
         type: 'warning'
       }
     )
-    // 调用删除用户接口（需补充 API）
-    // await deleteUser(userStore.user.id)
+    // 调用删除用户接口
+    await deleteUser(userStore.user.id)
     ElMessage.success('账号已注销')
-    userStore.logout()
+    await userStore.logout()
     router.push('/login')
   } catch (error) {
-    // 用户取消操作
+    // 用户取消操作或注销失败
+    if (error !== 'cancel' && error !== 'close') {
+      ElMessage.error(error?.message || '注销失败，请重试')
+    }
   }
 }
 </script>
